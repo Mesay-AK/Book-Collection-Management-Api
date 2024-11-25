@@ -1,8 +1,12 @@
- import Book from "../models/book";
+import Book from "../models/book";
 import bookValidation from "../models/bookValidation";
- import BookValidation from "../models/bookValidationookValidation"
 
- const notFound = new Error("Book not found")
+
+
+const notFound = new Error("Book not found")
+const errorResponse = (res, error, statusCode = 500) => {
+    res.status(statusCode).json({error:error.message || "Internal Server Error"})
+};
 
 
 const addBook = async(req, res) => {
@@ -72,7 +76,7 @@ const updateBookById = async (req, res) => {
     }
 }
 
-const deleteBooks = async(req, res) => {
+const deleteBookById = async(req, res) => {
     try{
         const {id} = req.params;
 
@@ -119,46 +123,19 @@ const addReaction = async(req, res) => {
 }
 
 
+
 export { 
     addBook,
     getBooks,
     getBookById,
     updateBookById,
-    deleteBooks,
+    deleteBookById,
     checkAvailability,
     addReaction,
 };
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const errorResponse = (res, error, statusCode = 500) => {
-    res.status(statusCode).json({error:error.message || "Internal Server Error"})
-};
 
 
 
