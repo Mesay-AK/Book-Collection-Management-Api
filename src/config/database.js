@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 
 
-
 const connectDataBase = async(MONGO_URI) => {
     try {
         if (!MONGO_URI) {

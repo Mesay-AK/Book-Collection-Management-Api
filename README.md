@@ -64,7 +64,7 @@ PORT=5000
  ```bash
     npx nodemon src/app.js
 ```
-
+The server will be running at http://localhost:5000/book-collection if you do not configure the port in your .env. 
 
 # EndPoints
 
