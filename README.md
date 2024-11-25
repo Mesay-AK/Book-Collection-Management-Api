@@ -103,9 +103,10 @@ Adds a new book to the collection.
 ***6. Add Reaction (Like/Dislike) - PATCH /books/:id/:reaction/***
 
  - Adds a like or dislike to the book.
-URL Parameters:
-    id: The unique ID of the book.
-    reaction: like or dislike.
+
+  URL Parameters:
+      id: The unique ID of the book.
+      reaction: like or dislike.
 
 ***7. Check availabilty of copy - GET /books/:id/copies***
 
