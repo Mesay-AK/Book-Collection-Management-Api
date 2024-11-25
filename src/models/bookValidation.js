@@ -1,4 +1,4 @@
-import joi, {string } from "joi";
+import joi from "joi";
 
 const bookValidationSchema = joi.object({
     title: joi.string().required(),
@@ -11,3 +11,7 @@ const bookValidationSchema = joi.object({
     likes:joi.number().integer().min(0).default(0),
     disLikes:joi.number().integer().min(0).default(0)
 })
+
+export default mongoose.model("BookValidation", bookValidationSchema)
+
+
