@@ -105,10 +105,8 @@ Adds a new book to the collection.
  - Adds a like or dislike to the book.
 
   URL Parameters:
-  
-      id: The unique ID of the book.
-      
-      reaction: like or dislike.
+    id: The unique ID of the book. 
+    reaction: like or dislike.
 
 ***7. Check availabilty of copy - GET /books/:id/copies***
 
