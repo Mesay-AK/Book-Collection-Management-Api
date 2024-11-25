@@ -1,5 +1,6 @@
-import Book from "../models/book";
-import bookValidation from "../models/bookValidation";
+import Book from "../models/book.js";
+import {BookValidation, updateBookValidation} from "../models/bookValidation.js";
+import mongoose from "mongoose";
 
 
 
@@ -11,7 +12,7 @@ const errorResponse = (res, error, statusCode = 500) => {
 
 const addBook = async(req, res) => {
     try {
-        const {error, value} = BookValidation(req.body);
+        const {error, value} = BookValidation.validate(req.body);
         if (error) return errorResponse(res, error, 400)
 
         const newBook = new Book(value);
@@ -26,15 +27,15 @@ const addBook = async(req, res) => {
 
 const getBooks = async(req, res) =>{
     try{
-        const {genere, author, publishedYear} = req.body;
+        const {genre, author, publishedYear} = req.query;
         const filter = {};
 
-        if (genere) filter.generd = genere;
+        if (genre) filter.genre = genre;
         if (author) filter.author = author;
         if (publishedYear) filter.publishedYear = publishedYear;
 
         const books = await Book.find(filter);
-        if (!books) return errorResponse(res, notFound, 404);
+        if (books.length == 0) return errorResponse(res, notFound, 404);
 
         res.status(200).json({books});
 
@@ -47,8 +48,12 @@ const getBooks = async(req, res) =>{
 const getBookById = async(req, res) =>{
     try{
         const {id} = req.params;
+        
+        if (!mongoose.isValidObjectId(id)) {
+            return errorResponse(res, new Error("Invalid book ID"), 400)
+            }
+            
         const book = await Book.findById(id);
-
         if (!book) return errorResponse(res, notFound, 404);
 
         res.status(200).json({book});
@@ -62,8 +67,11 @@ const getBookById = async(req, res) =>{
 const updateBookById = async (req, res) => {
     try {
         const {id} = req.params;
+        if (!mongoose.isValidObjectId(id)) {
+            return errorResponse(res, new Error("Invalid book ID"), 400)
+            }
 
-        const {error, value} = bookValidation.validate(req.body);
+        const {error, value} = updateBookValidation.validate(req.body);
         if (error) return errorResponse(res, error, 400);
 
         const updatedBook = await Book.findByIdAndUpdate(id, value, {new:true});
@@ -79,8 +87,11 @@ const updateBookById = async (req, res) => {
 const deleteBookById = async(req, res) => {
     try{
         const {id} = req.params;
+        if (!mongoose.isValidObjectId(id)) {
+            return errorResponse(res, new Error("Invalid book ID"), 400)
+            }
 
-        const deletedBook = Book.findByIdAndDelete(id);
+        const deletedBook = await Book.findByIdAndDelete(id);
         if (!deletedBook) return errorResponse(res, notFound, 400);
 
         res.status(200).json({message: "Book deleted Successfully", book: deletedBook})
@@ -92,11 +103,14 @@ const deleteBookById = async(req, res) => {
 const checkAvailability = async(req, res) =>{
     try{
         const {id} = req.params;
+        if (!mongoose.isValidObjectId(id)) {
+            return errorResponse(res, new Error("Invalid book ID"), 400)
+            }
 
-        const book = Book.findById(id);
+        const book = await Book.findById(id);
         if (!book) return errorResponse(res, notFound, 404);
         
-        res.status(200).json({ title: book.title, numberOfAvailableCopies : book.NumberOfAvailableCopies})
+        res.status(200).json({isbn: book.isbn, title: book.title, numberOfAvailableCopies : book.numberOfAvailableCopies})
     }catch(err){
         errorResponse(res, err)
     }
@@ -104,18 +118,22 @@ const checkAvailability = async(req, res) =>{
 
 const addReaction = async(req, res) => {
     try{
-        const {id} = req.params;
-        const {type} = req.body;
+        const {id, reaction} = req.params;
 
-        if (!["like", "dislike"].includes(type)){
-            return errorResponse(res, new Error("Invalid Reaction type"), 400);
-        }
+        if (!mongoose.isValidObjectId(id)) {
+            return errorResponse(res, new Error("Invalid book ID"), 400)
+            }
 
-        const updatedReaction = type === "like" ? {$inc: {like : 1}} : {$inc : {dislike : 1}};
-        const updatedBook = await Book.findByIdAndUpdate(id, updatedReaction, {new : true});
+        if (!["like", "dislike"].includes(reaction)){
+                return errorResponse(res, new Error("Invalid Reaction reaction"), 400);
+            }
+
+        const updatedReaction = reaction === "like" ? { $inc: { likes: 1 } } : { $inc: { disLikes: 1 } };
+        const updatedBook = await Book.findByIdAndUpdate(id, updatedReaction, { new: true })
+            .select("isbn title likes disLikes");
         if (!updatedBook) return errorResponse(res, notFound, 404);
 
-        res.status(200).json({message: "Reaction added successfully", Reaction : updatedBook.updatedReaction})
+        res.status(200).json({message: "Reaction added successfully", book : updatedBook})
 
     }catch(err){
         errorResponse(res, err);
