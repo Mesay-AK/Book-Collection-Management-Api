@@ -70,47 +70,46 @@ PORT=5000
 
 ***1. Add a New Book - POST /books***
 
-    - Adds a new book to the collection.
+Adds a new book to the collection.
 
 ***2. Get All Books - GET /books***
 
-    - Fetches all books with optional query parameters to filter by genre, author, or publishedYear.
+- Fetches all books with optional query parameters to filter by genre, author, or publishedYear.
 
     EXample:
         GET /books?genre=Fiction&author=F. Scott
 
 ***3. Get Book by ID - GET /books/:id***
 
-    - Fetches a book by its unique ID.
+- Fetches a book by its unique ID.
 
     URL Parameter:
         id: The unique ID of the book.
 
 ***4. Update Book by ID - PUT /books/:id***
 
-    - Updates the details of an existing book.
+- Updates the details of an existing book.
 
     URL Parameter:
         id: The unique ID of the book.
 
 ***5. Delete a Book - DELETE /books/:id***
 
-    - Deletes a book by its unique ID.
+- Deletes a book by its unique ID.
 
     URL Parameter:
         id: The unique ID of the book.
 
 ***6. Add Reaction (Like/Dislike) - PATCH /books/:id/:reaction/***
 
-    - Adds a like or dislike to the book.
-
-    URL Parameters:
-        id: The unique ID of the book.
-        reaction: like or dislike.
+ - Adds a like or dislike to the book.
+URL Parameters:
+    id: The unique ID of the book.
+    reaction: like or dislike.
 
 ***7. Check availabilty of copy - GET /books/:id/copies***
 
-    - Checks if a copy of a book is available by its unique ID.
+- Checks if a copy of a book is available by its unique ID.
 
     URL Parameter:
         id: The unique ID of the book.
