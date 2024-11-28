@@ -1,13 +1,14 @@
 {
   "dependencies": {
     "body-parser": "^1.20.3",
+    "deep-extend": "^0.6.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "https-proxy-agent": "^7.0.5",
     "joi": "^17.13.3",
+    "minimist": "^1.2.8",
     "mongodb": "^6.11.0",
-    "mongoose": "^8.8.2",
-    "npx": "^3.0.0"
+    "mongoose": "^8.8.2"
   },
   "name": "book-collection",
   "version": "1.0.0",
@@ -23,5 +24,9 @@
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.7"
+  },
+  "resolutions": {
+    "minimist": "^1.2.6",
+    "deep-extend": "^0.5.1"
   }
 }
